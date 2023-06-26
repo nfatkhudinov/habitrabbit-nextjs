@@ -1,11 +1,14 @@
 import { createGlobalStyle } from 'styled-components';
-import back from './111.svg'
+
 
 const GlobalStyle = createGlobalStyle`
   /* Reset and base styles  */
   
   body{
-    background-image: url(${back.src});
+    display: flex;
+    justify-content: center;
+    background: linear-gradient(180deg, #2E9699 0%, #FFF 100%);
+    font-family: 'Inter', sans-serif;
   }
   
   * {

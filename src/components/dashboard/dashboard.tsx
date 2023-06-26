@@ -6,6 +6,11 @@ import {axiosAuth} from "@/lib/axios";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import {signOut, useSession} from "next-auth/react";
 import moment from "moment";
+import TodayHabits from "@/components/todayHabits/todayHabits";
+import ButtonAccount from "@/components/dashboard/buttonAccount/buttonAccount";
+import Alert from "@/components/alert/alert";
+import DownloadWallpaper from "@/components/downloadWallpaper/downloadWallpaper";
+import AllHabits from "@/components/allHabits/allHabits";
 const Dashboard = () => {
     const [userName, setUserName] = useState('')
     const axiosAuth = useAxiosAuth()
@@ -16,7 +21,9 @@ const Dashboard = () => {
     }
 
     const logoutWithRequest = async ()=>{
+
         await axiosAuth.post('/api/logout', {
+            // @ts-ignore
             refreshToken: session?.user.refreshToken
         })
             .then(()=>signOut()
@@ -29,34 +36,19 @@ const Dashboard = () => {
     }, [])
 
     return (
-        <Layout>
         <S.Container>
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static">
-                    <Toolbar>
-                        <IconButton
-                            size="large"
-                            edge="start"
-                            color="inherit"
-                            aria-label="menu"
-                            sx={{ mr: 2 }}
-                        >
-                        </IconButton>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            Добро пожаловать, {userName}
-                        </Typography>
-                        <Button onClick={()=>logoutWithRequest()} color="inherit">Выйти</Button>
-                    </Toolbar>
-                </AppBar>
-            </Box>
-            <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-                Сегодня {moment().format('ll')}
-            </Typography>
-            <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-                Задачи на сегодня:
-            </Typography>
+            <S.MenuContainer>
+                <ButtonAccount type={'account'}/>
+                <ButtonAccount type={'settings'}/>
+                <ButtonAccount type={'logout'} onClick={logoutWithRequest}/>
+            </S.MenuContainer>
+            <S.ContentContainer>
+                <S.HeaderText>Добро пожаловать,<br/> {userName}</S.HeaderText>
+                <TodayHabits/>
+                <DownloadWallpaper/>
+                <AllHabits/>
+            </S.ContentContainer>
         </S.Container>
-        </Layout>
     );
 };
 
